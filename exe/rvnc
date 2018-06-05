@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'rvnc'
+require 'optparse'
+require 'terminal-table'
+
+options = {}
+
+OptionParser.new do |opt|
+  opt.banner = 'Usage: rvnc [options] filepath'
+  opt.on('-v', '--version', 'display the version.') { options[:version] = true }
+
+  opt.parse!(ARGV)
+end
+
+case
+  when options[:version]
+    puts "RVNC version: #{RVNC::VERSION}"
+  else
+    result = RVNC.collect(ARGV.first)
+    table = Terminal::Table.new(rows: result.map(&:values), headings: ['Name', 'Location'])
+    puts table
+end
